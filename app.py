@@ -1,7 +1,8 @@
-from flask import Flask, request, redirect, render_template, session,
-url_for
+from flask import Flask, request, redirect, render_template, session, url_for
 
 app = Flask(__name__)
+
+app.config("TEMPLATES_AUTO_RELOAD") = True
 
 @app.route("/")
 def configuration():
