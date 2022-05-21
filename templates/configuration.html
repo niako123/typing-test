@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}Configuration{% endblock %}
+
+{% block content %}
+    <h1>Configuration</h1>
+
+    <form action="/" method="POST">
+        <p>Choose your configuration method: </p>
+        <div>
+            <input type="radio" id="unlimited" name="configuration" value="Configure time">
+            <label for="unlimited">Configure time limit</label>
+        </div>
+        <div>
+            <input type="radio" id="limited" name="configuration" value="Configure length">
+            <label for="limited">Configure text length</label>
+        </div>
+    </form>
+    <p></p>
+    
+{% endblock %}

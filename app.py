@@ -1,20 +1,16 @@
 from flask import Flask, request, redirect, render_template, session, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
+from tempfile import mkdtemp
 
 app = Flask(__name__)
 
-app.config("TEMPLATES_AUTO_RELOAD") = True
-
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def configuration():
     """ Guest configuration of the race """
-
-    return "<p>Hello, World!</p>"
-
-@app.route("/<username>")
-def user_configuration():
-    """ Users configuration of the race """
-
-    return "TODO"
+    if request.method == "POST":
+        return "<p>Hello, World!<p>"
+    else:
+        return render_template("configuration.html")
 
 @app.errorhandler(404)
 def page_not_found(error):
