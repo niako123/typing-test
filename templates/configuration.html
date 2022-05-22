@@ -3,19 +3,22 @@
 {% block title %}Configuration{% endblock %}
 
 {% block content %}
-    <h1>Configuration</h1>
+    <h1>CONFIGURATION</h1>
 
-    <form action="/" method="POST">
-        <p>Choose your configuration method: </p>
+    <form action="/" method="POST" class="bullet">
+        <p style="margin-left: -100px; font-size: larger;"><u>CONFIGURE</u> :</p>
         <div>
             <input type="radio" id="unlimited" name="configuration" value="Configure time">
-            <label for="unlimited">Configure time limit</label>
+            <label for="unlimited">Time limit</label>
         </div>
+        <br>
         <div>
             <input type="radio" id="limited" name="configuration" value="Configure length">
-            <label for="limited">Configure text length</label>
+            <label for="limited">Text length</label>
         </div>
     </form>
-    <p></p>
+    <div>
+        <p id="forms"></p>
+    </div>
     
 {% endblock %}
