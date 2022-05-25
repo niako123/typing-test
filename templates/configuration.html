@@ -5,6 +5,14 @@
 {% block content %}
     <h1>CONFIGURATION</h1>
 
+    {% if error %} 
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div>
+                <strong>Error :  </strong> {{ error }}
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
     <form action="/" method="POST" class="bullet">
         <p style="margin-left: -100px; font-size: larger;"><u>CONFIGURE</u> :</p>
         <div>
@@ -16,9 +24,9 @@
             <input type="radio" id="limited" name="configuration" value="Configure length">
             <label for="limited">Text length</label>
         </div>
+        <br>
+        <div style="text-align: right; margin-right: 100px;">
+            <input type="submit" value="Submit">
+        </div>
     </form>
-    <div>
-        <p id="forms"></p>
-    </div>
-    
 {% endblock %}
