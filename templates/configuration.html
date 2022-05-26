@@ -4,25 +4,20 @@
 
 {% block content %}
     <h1>CONFIGURATION</h1>
-
-    {% if error %} 
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <div>
-                <strong>Error :  </strong> {{ error }}
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endif %}
+    
     <form action="/" method="POST" class="bullet">
         <p style="margin-left: -100px; font-size: larger;"><u>CONFIGURE</u> :</p>
-        <div>
-            <input type="radio" id="unlimited" name="configuration" value="Configure time">
-            <label for="unlimited">Time limit</label>
-        </div>
-        <br>
-        <div>
-            <input type="radio" id="limited" name="configuration" value="Configure length">
-            <label for="limited">Text length</label>
+        <div class="form-check">
+            <div>
+                <input type="radio" id="unlimited" name="configuration" value="Configure time" class="form-check-input" required>
+                <label for="unlimited" class="form-check-label">Time limit</label>
+            </div>
+            <br>
+            <div>
+                <input type="radio" id="limited" name="configuration" value="Configure length" class="form-check-input" required>
+                <label for="limited" class="form-check-label">Text length</label>
+                <div class="invalid-feedback">Select one of the configuration methods</div>
+            </div>
         </div>
         <br>
         <div style="text-align: right; margin-right: 100px;">
