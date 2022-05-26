@@ -4,24 +4,16 @@
 
 {% block content %}
     <h1>CONFIGURATION</h1>
-    
-    <form action="/" method="POST" class="bullet">
-        <p style="margin-left: -100px; font-size: larger;"><u>CONFIGURE</u> :</p>
-        <div class="form-check">
-            <div>
-                <input type="radio" id="unlimited" name="configuration" value="Configure time" class="form-check-input" required>
-                <label for="unlimited" class="form-check-label">Time limit</label>
-            </div>
-            <br>
-            <div>
-                <input type="radio" id="limited" name="configuration" value="Configure length" class="form-check-input" required>
-                <label for="limited" class="form-check-label">Text length</label>
-                <div class="invalid-feedback">Select one of the configuration methods</div>
-            </div>
-        </div>
-        <br>
-        <div style="text-align: right; margin-right: 100px;">
-            <input type="submit" value="Submit">
-        </div>
-    </form>
+    <div id="conf">
+        Something should change
+    </div>
+    <div>
+        <p style="margin-left: 100 px; font-size: larger;"><u>CONFIGURE</u> :</p>
+        <form class="bullet">
+            <select name="configuration" onchange="conf(this.value)">
+                <option value="unlimited">Time Limit</option>
+                <option value="limited">Text Length</option>
+            </select>
+        </form>
+    </div>
 {% endblock %}

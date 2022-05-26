@@ -3,7 +3,12 @@
 {% block title %}Time Configuration{% endblock %}
 
 {% block content %}
-    <h1>GOOD LUCK, {{ player }} !</h1>
+    <h2 class="font-monospace" style="padding: 50px;">GOOD LUCK, {{ player }} !</h2>
     
+    <p>
+        {% for word in words %}
+            {{ word }}
+        {% endfor %}
+    </p>
     
 {% endblock %}
