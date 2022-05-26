@@ -53,9 +53,9 @@ def time():
     with sqlite3.connect('typer.db') as con:
         cur = con.cursor()
         if not 'user_id' in session:
-            cur.execute('INSERT INTO requests (minutes, seconds, user) VALUES (?, ?, ?)', (minutes, seconds, "guest"))
+            cur.execute('INSERT INTO requests (minutes, seconds, user) VALUES (?, ?, ?, ?)', (minutes, seconds, "guest", "time limit"))
             con.commit()
             return render_template("keyboard.html", player="GUEST")
-        cur.execute('INSERT INTO requests (minutes, seconds, user) VALUES (?, ?, ?)', (minutes, seconds, session['user_id']))
+        cur.execute('INSERT INTO requests (minutes, seconds, user) VALUES (?, ?, ?, ?)', (minutes, seconds, session['user_id'], "time limit"))
         con.commit()
         return TODO
