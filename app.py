@@ -5,6 +5,7 @@ from random import randrange
 import time
 import sqlite3
 from random import shuffle
+import numpy as np
 
 app = Flask(__name__)
 
@@ -35,16 +36,21 @@ def configuration():
 def register():
     return "TODO"
 
-@app.route("/limited", methods=["POST"])
+@app.route("/unlimited", methods=["POST"])
 def time():
     """ Configure with dictionary """
     shuffle(words)
+    newarr = np.array_split(words, 5000)
+    text = ""
+
+    for word in newarr[0]:
+        text = text + word
 
     minutes = request.form.get("minutes")
     seconds = request.form.get("seconds")
 
     if not seconds and not minutes:
-        return render_template("limited.html", error="Invalid: choose valid values")
+        return render_template("unlimited.html", error="Invalid: choose valid values")
     if not seconds:
         seconds = 0
     if not minutes: 
@@ -57,7 +63,7 @@ def time():
         if not 'user_id' in session:
             cur.execute('INSERT INTO requests (minutes, seconds, user, configuration) VALUES (?, ?, ?, ?)', (minutes, seconds, "guest", "time limit"))
             con.commit()
-            return render_template("keyboard.html", player="GUEST", words=words)
+            return render_template("keyboard.html", player="GUEST", word="love", text=text)
         cur.execute('INSERT INTO requests (minutes, seconds, user, configuration) VALUES (?, ?, ?, ?)', (minutes, seconds, session['user_id'], "time limit"))
         con.commit()
         return TODO

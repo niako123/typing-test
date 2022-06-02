@@ -4,11 +4,11 @@
 
 {% block content %}
     <h2 class="font-monospace" style="padding: 50px;">GOOD LUCK, {{ player }} !</h2>
-    
-    <p>
-        {% for word in words %}
-            {{ word }}
-        {% endfor %}
-    </p>
+
+    <div>
+        <p id="word"></p>
+        <input placeholder="Start typing" id="text" name="text" autocomplete="off">
+    </div>
+        
     
 {% endblock %}
