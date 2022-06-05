@@ -4,10 +4,30 @@
 
 {% block content %}
     <h2 class="font-monospace" style="padding: 50px;">GOOD LUCK, {{ player }} !</h2>
-
     <div>
-        <p id="word"></p>
-        <input placeholder="Start typing" id="text" name="text" autocomplete="off">
+        <div style="margin-left: 100px;">
+            <p id="textbox" class="font-monospace" style="size: 100px;"></p>
+        </div>
+        <div style="margin-left: 100px;">
+            <input placeholder="Start typing" id="user" name="user" autocomplete="off">
+        </div>
+        <br>
+        <div style="margin-left: 75px;">
+            {% if seconds < 10 %}
+                <p id="time" style="position: left;" class="fst-italic">
+                    Time: <span id="min">0</span>:<span id="sec">00</span> /
+                    <span id="minutes">{{ minutes }}</span>:0<span id="seconds">{{ seconds }}</span>
+                </p>
+            {% else %}
+            <p id="time" class="fst-italic">
+                Time: <span id="min">0</span>:<span id="sec">00</span> /
+                <span id="minutes">{{ minutes }}</span>:<span id="seconds">{{ seconds }}</span>
+            </p>
+            {% endif %}
+            <div class="badge bg-primary text-wrap" style="width: 6rem; background-color:grey;">
+                Speed : <span id="speed"></span>
+            </div>
+        </div>
     </div>
         
     
