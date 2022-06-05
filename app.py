@@ -61,18 +61,14 @@ def time():
 def text():
     """ Configure with an api """
 
-    difficulty = request.form.get("difficulty")
-
-    if difficulty == "Difficulty":
-        return render_template("limited.html", error="Invalid: choose a valid option")
-
     with sqlite3.connect('typer.db') as con:
+        cur = con.cursor()
         if not 'user_id' in session:
-            cur.execute('INSERT INTO requests (difficulty, user, configuration) VALUES  (?, ?, ?)', (difficulty, "guest", "text length"))
+            cur.execute('INSERT INTO requests (user, configuration) VALUES  (?, ?)', ("guest", "text length"))
             con.commit()
             flash("Type to start.")
-            return render_template("keyboard_2.html", player="GUEST", difficulty=difficulty)
-        cur.execute('INSERT INTO requests (difficulty, user, configuration) VALUES  (?, ?, ?)', (difficulty, session["user_id"], "text length"))
+            return render_template("keyboard_2.html", player="GUEST")
+        cur.execute('INSERT INTO requests (user, configuration) VALUES  (?, ?)', (session["user_id"], "text length"))
         con.commit()
         flash("Type to start.")
         return "TODO"

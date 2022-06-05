@@ -3,7 +3,7 @@
 {% block title %}Text Length Configuration{% endblock %}
 
 {% block content %}
-    <h1>TEXT LENGTH CONFIGURATION</h1>
+    <h1>TEXT LENGTH GAME</h1>
     {% if error %}
         <div class="alert alert-dark alert-dismissible fade show" role="alert">
             {{ error }}
@@ -11,19 +11,8 @@
         </div>
     {% endif %}
     <form action="/limited" method="POST" class="bullet">
-        <div>
-            <div class="col-md-3">
-                <select class="form-select" aria-label="Default select example" id="difficulty" name="difficulty">
-                    <option selected>Difficulty</option>
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="difficult">Difficult</option>
-                  </select>
-            </div>
-            <br>
-        </div>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end" style="margin-right: 50px;">
-            <button type="submit" class="btn btn-secondary">Submit</button>
+        <div class="d-grid gap-2 d-md-flex" style="position:center;">
+            <button type="submit" class="btn btn-secondary">START</button>
         </div>
     </form>
 
