@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block script %}
+    <script src="/static/myscripts2.js" type="module"></script>
+    <meta name="difficulty" content="{{ difficulty }}">
+{% endblock %}
+
+{% block title %}Text Length keyboard{% endblock %}
+
+{% block content %}
+    <h2 class="font-monospace" style="padding: 50px;">GOOD LUCK, {{ player }} !</h2>
+    <div>
+        <div style="margin-left: 100px;">
+            <p id="textbox" class="font-monospace" style="size: 100px;"></p>
+        </div>
+        <div style="margin-left: 100px;">
+            <input placeholder="Start typing" id="user" name="user" autocomplete="off">
+        </div>
+        <br>
+    </div>
+        
+    
+{% endblock %}
