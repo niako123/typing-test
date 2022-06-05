@@ -1,8 +1,30 @@
 {% extends "layout.html" %}
 
-{% block title %}Time configuration{% endblock %}
+{% block title %}Text Length Configuration{% endblock %}
 
 {% block content %}
-    <h1>Limited</h1>
+    <h1>TEXT LENGTH CONFIGURATION</h1>
+    {% if error %}
+        <div class="alert alert-dark alert-dismissible fade show" role="alert">
+            {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    <form action="/limited" method="POST" class="bullet">
+        <div>
+            <div class="col-md-3">
+                <select class="form-select" aria-label="Default select example" id="diffuculty">
+                    <option selected>Difficulty</option>
+                    <option value="1">Easy</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Difficult</option>
+                  </select>
+            </div>
+            <br>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end" style="margin-right: 50px;">
+            <button type="submit" class="btn btn-secondary">Submit</button>
+        </div>
+    </form>
 
 {% endblock %}

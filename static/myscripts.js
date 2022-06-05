@@ -26,7 +26,7 @@ function update_time() {
         min++;
         sec = 0;
         changingMin.innerHTML = min;
-        changingSec.innerHTML = sec;
+        changingSec.innerHTML = "0" + sec;
     }
     else {
         sec++;
