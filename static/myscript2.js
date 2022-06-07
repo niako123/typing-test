@@ -18,7 +18,7 @@ function get_difficulty() {
 // Get the text
 async function get_text() {
     try {
-        content = await fetch('https://api.quotable.io/random')
+        let content = await fetch('https://api.quotable.io/random')
         let data = await content.json();
         randomText = data.content;
         post_text(data.content);
@@ -96,21 +96,45 @@ function upward_word() {
 
 // Timer on
 function timer_set() {
-    let timesRun = 0;
+    let timesRun = 1;
+    userInput.oninput = function onEvent(event) { 
+        check();
+    }
     var interval = setInterval(function() {
         timesRun++;
-        if(upward == length) {
+        speed(timesRun);
+        if((upward - 1) == length) {
             clearInterval(interval);
+            $(document).ready(function($){
+                $.ajax({
+                    data: JSON.stringify({
+                        'min' : min,
+                        sec : sec,
+                        speed : Math.round((typed_entries/5)/(timesRun/60)),
+                        configuration : 'text'
+                    }),
+                    type : 'POST',
+                    url : '/result',
+                    dataType : 'json',
+                    contentType : 'application/json; charset=utf-8',
+                    success : function(response) {
+                        if (response.redirect) {
+                            window.location = response.redirect;
+                        }
+                    }
+                })
+            });
             userInput.oninput = function onEvent(event) {
                 event.stopPropagation();
                 alert('Text ended');
             }
         }
-        userInput.oninput = function onEvent(event) {
-            speed(timesRun);
-            check();
-        }
-        update_time();
+        else {
+            userInput.oninput = function onEvent(event) { 
+                check();
+            }
+            update_time();
+        } 
     }, 1000);
     hasStarted = false;
 }

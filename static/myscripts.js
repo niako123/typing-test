@@ -88,19 +88,44 @@ function time_need() {
 // Set the timer
 function timer_set() {
     var needed = time_need();
-    var timesRun = 0;
+    var timesRun = 1;
+    userInput.oninput = function onEvent() {
+        speed(timesRun);
+        check();
+    }
     var interval = setInterval(function() {
         timesRun++;
-        userInput.oninput = function onEvent(event) {
-            speed(timesRun);
+        speed(timesRun);
+        userInput.oninput = function onEvent() {
             check();
         }
-        if(timesRun === needed){
+        if((timesRun - 1) === needed){
             clearInterval(interval);
             userInput.oninput = function onEvent(event) {
                 event.stopPropagation();
                 alert('Timeout');
             }
+            setTimeout(function () {
+                $(document).ready(function($){
+                    $.ajax({
+                        data: JSON.stringify({
+                            min : min,
+                            sec : sec,
+                            speed : Math.round((typed_entries/5)/(timesRun/60)),
+                            configuration : 'time'
+                        }),
+                        type : 'POST',
+                        url : '/result',
+                        dataType : 'json',
+                        contentType : 'application/json; charset=utf-8',
+                        success : function(response) {
+                            if (response.redirect) {
+                                window.location = response.redirect;
+                            }
+                        }
+                    })
+                });
+            }, 2000)
         }
         update_time();
     }, 1000);

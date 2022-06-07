@@ -11,6 +11,7 @@
     <h2 class="font-monospace" style="padding: 50px;">GOOD LUCK, {{ player }} !</h2>
     <div>
         <div style="margin-left: 100px; margin-right: 100px;">
+            <p id="start" class="font-monospace" style="size: 150px;"></p>
             <p id="textbox" class="font-monospace" style="size: 100px;"></p>
         </div>
         <div style="margin-left: 100px;">
@@ -18,11 +19,13 @@
         </div>
         <br>
         <div style="margin-left: 75px;">
-            <p id="time" class="fst-italic">
-                Time: <span id="min">0</span>:<span id="sec">00</span>
-            </p>
-            <div class="badge bg-primary text-wrap" style="width: 6rem; background-color:grey;">
-                Speed : <span id="speed"></span>
+            <div>
+                <p id="time" class="fst-italic">
+                    Time: <span id="min" name="min">0</span></span>:<span id="sec" name="sec">00</span>
+                </p>
+                <div class="badge bg-primary text-wrap" style="width: 6rem; background-color:grey;">
+                    Speed : <span id="speed" name="speed">0</span> wpm
+                </div>
             </div>
         </div>
     </div>

@@ -1,11 +1,11 @@
-from flask import Flask, request, redirect, render_template, session, url_for, flash, g
+from flask import Flask, request, redirect, render_template, session, url_for, flash, g, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 from tempfile import mkdtemp
 from random import randrange
 import sqlite3
 from random import shuffle
 import numpy as np
-
+import json
 app = Flask(__name__)
 
 # Configurations
@@ -72,3 +72,36 @@ def text():
         con.commit()
         flash("Type to start.")
         return "TODO"
+
+@app.route("/result", methods=["POST", "GET"])
+def result():
+    """ Show run history """
+
+    if request.method == "POST":
+        data = json.loads(request.data)
+        min = data['min']
+        sec = data['sec']
+        speed = data['speed']
+        configuration = data['configuration']
+
+        with sqlite3.connect('typer.db') as con:
+            cur = con.cursor()
+            if not 'user_id' in session:
+                if configuration == "text":
+                    cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', ("guest", "text length", min, sec, speed))
+                else:
+                    cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', ("guest", "time limit", min, sec, speed))
+                con.commit()
+                flash("Latest result saved.")
+                return  jsonify(dict(redirect='/history'))
+            if configuration == "text":
+                cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', (session['user_id'], "text length", min, sec, speed))
+            else:
+                cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', (session['user_id'], "time limit", min, sec, speed))
+            con.commit()
+            flash("Type to start.")
+            return "TODO"
+    
+@app.route("/history", methods=["GET"])
+def history():
+    return render_template("history.html")
