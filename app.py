@@ -14,7 +14,9 @@ app.secret_key = 'b1b92f2cd885248e85ba872c3399628d7062bf375d58fa0042f95afaf62a31
 @app.route("/", methods=["GET", "POST"])
 def configuration():
     """ Guest configuration of the race """
-
+    user = "guest"
+    if 'user_id' in session:
+        user = "user"
     if request.method == "POST":
         configuration = request.form.get("configuration")
 
@@ -24,7 +26,7 @@ def configuration():
         elif configuration == "limited":
             flash('You were succesfully redirected')
             return render_template("limited.html")
-    return render_template("configuration.html")
+    return render_template("configuration.html", user=user)
 
 @app.route("/register")
 def register():
@@ -92,7 +94,6 @@ def result():
                 else:
                     cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', ("guest", "time limit", min, sec, speed))
                 con.commit()
-                flash("Latest result saved.")
                 return  jsonify(dict(redirect='/history'))
             if configuration == "text":
                 cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', (session['user_id'], "text length", min, sec, speed))
@@ -104,4 +105,19 @@ def result():
     
 @app.route("/history", methods=["GET"])
 def history():
-    return render_template("history.html")
+    """ Getting the page """
+    runs = [] 
+    user_runs = []
+    user = ""
+    with sqlite3.connect('typer.db') as con: 
+        cur = con.cursor()
+        if 'user_id' in session:
+            user_runs = cur.execute('SELECT * FROM runs WHERE user = ?', session['user_id'])
+            user = "user"
+        else:
+            user = "guest"
+        runs = cur.execute('SELECT * FROM runs')
+        con.commit()
+    flash("Latest result saved.")
+
+    return render_template("history.html", user=user, user_runs=user_runs, runs=runs)

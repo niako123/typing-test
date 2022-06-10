@@ -1,1 +1,50 @@
-<p>TODO</p>
+{% extends "layout.html" %}
+
+{% block title %} History {% endblock %}
+
+{% block content %}
+    <h1>History</h1>
+    <div class="container">
+        <div class="row justify-content-start">
+            <div class="col-4">
+                <button type="button" class="btn btn-secondary">General</button>
+                {% if user == "user" %}
+                    <button type="button" class="btn btn-secondary">User only</button>
+                {% endif %}
+            </div>
+            <div class="col-4">
+
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="col align-self-center">
+            <table class="text-center table table-dark table-hover talbe-striped table-bordered">
+                <thead>
+                    <th scope="col">Run #</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Speed</th>
+                </thead>
+                <tbody class="table-group-divider">
+                    {% for run in runs | reverse %}
+                    <tr>
+                        <th scope="row">{{ run[0] }}</th>
+                        <td>{{ run[5] }}</td>
+                        <td>{{ run[4] }}</td>
+                        {% if run[2] < 10 %}
+                        <td>{{ run[1] }}:0{{ run[2] }}</td>
+                        {% else %}
+                        <td>{{ run[1] }}:{{ run[2] }}</td>
+                        {% endif %}
+                        <td>{{ run[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+{% endblock %}
