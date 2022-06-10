@@ -5,17 +5,23 @@
 {% block content %}
     <h1>Register</h1>
 
+    {% if error %}
+        <div class="alert alert-dark alert-dismissible fade show" role="alert">
+            {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
     <div class="container">
-        <form action="/login" method="POST" class="bullet">
+        <form action="/register" method="POST" class="bullet">
             <div class="row gx-1">
                 <div class="col">
                     <input type="text" id="username" placeholder="Username" name="username" autocomplete="off" autofocus>
                 </div>
                 <div class="col">
-                    <input type="text" id="password" placeholder="Password" name="password" autocomplete="off" autofocus>
+                    <input type="password" id="password" placeholder="Password" name="password" autocomplete="off" autofocus>
                 </div>
                 <div class="col">
-                    <input type="text" id="confirm" placeholder="Password (again)" name="confirm" autocomplete="off" autofocus>
+                    <input type="password" id="confirmation" placeholder="Password (again)" name="confirmation" autocomplete="off" autofocus>
                 </div>
                 <div class="col">
                     <button type="submit" class="btn btn-secondary">Register</button>

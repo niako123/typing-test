@@ -7,7 +7,8 @@ from random import shuffle
 import numpy as np
 import json
 from flask_assets import Environment, Bundle
-from flask.ext.session import Session
+from flask_session import Session
+from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 assets = Environment(app)
@@ -68,8 +69,11 @@ def time():
             flash("Type to start.")
             return render_template("keyboard.html", player="GUEST", seconds=seconds, minutes=minutes)
         cur.execute('INSERT INTO requests (minutes, seconds, user, configuration) VALUES (?, ?, ?, ?)', (minutes, seconds, session['user_id'], "time limit"))
+        usernames = cur.execute("SELECT username FROM users WHERE id = ?", (session['user_id'], ))
         con.commit()
-        return "TODO"
+        for username in usernames:
+            flash("Type to start.")
+            return render_template("keyboard.html", player=username[0], seconds=seconds, minutes=minutes)
 
 @app.route("/limited", methods=["POST"])
 def text():
@@ -83,9 +87,11 @@ def text():
             flash("Type to start.")
             return render_template("keyboard_2.html", player="GUEST")
         cur.execute('INSERT INTO requests (user, configuration) VALUES  (?, ?)', (session["user_id"], "text length"))
+        usernames = cur.execute("SELECT username FROM users WHERE id = ?", (session['user_id'], ))
         con.commit()
-        flash("Type to start.")
-        return "TODO"
+        for username in usernames:
+            flash("Type to start.")
+            return render_template("keyboard_2.html", player=username[0])
 
 @app.route("/result", methods=["POST", "GET"])
 def result():
@@ -107,13 +113,14 @@ def result():
                     cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', ("guest", "time limit", min, sec, speed))
                 con.commit()
                 return  jsonify(dict(redirect='/history'))
-            if configuration == "text":
-                cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', (session['user_id'], "text length", min, sec, speed))
-            else:
-                cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', (session['user_id'], "time limit", min, sec, speed))
-            con.commit()
-            flash("Type to start.")
-            return "TODO"
+            usernames = cur.execute("SELECT username FROM users WHERE id = ?", (session['user_id'], ))
+            for username in usernames:
+                if configuration == "text":
+                    cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', (username[0], "text length", min, sec, speed))
+                else:
+                    cur.execute('INSERT INTO runs (user, configuration, minutes, seconds, speed) VALUES  (?, ?, ?, ?, ?)', (username[0], "time limit", min, sec, speed))
+                con.commit()
+                return  jsonify(dict(redirect='/history'))
     
 @app.route("/history", methods=["GET"])
 def history():
@@ -124,7 +131,7 @@ def history():
     with sqlite3.connect('typer.db') as con: 
         cur = con.cursor()
         if 'user_id' in session:
-            user_runs = cur.execute('SELECT * FROM runs WHERE user = ?', session['user_id'])
+            user_runs = cur.execute('SELECT * FROM runs WHERE user = ?', (session['user_id'], ))
             user = "user"
         else:
             user = "guest"
@@ -134,9 +141,31 @@ def history():
 
     return render_template("history.html", user=user, user_runs=user_runs, runs=runs)
 
+
 @app.route("/login", methods=['POST', 'GET'])
 def login():
     """ Login into a username """
+    rows = []
+    if request.method == "POST":
+        if not request.form.get('username'):
+            return render_template("login.html", error="Must provide username")
+        elif not request.form.get('password'):
+            return render_template('login.html', error="Must provide password")
+
+        with sqlite3.connect('typer.db') as con:
+            cur = con.cursor()
+            rows = cur.execute('SELECT * FROM users WHERE username = ?', (request.form.get('username'), ))
+            con.commit()
+        
+        counter = 1
+        for row in rows:
+            if counter != 1 or not check_password_hash(row[2], request.form.get('password')):
+                print(counter)
+                return render_template("login.html", error='Invalid username and/or password')
+            counter = counter + 1
+            session['user_id'] = row[0]
+        return redirect('/')
+        
     return render_template("login.html")
 
 
@@ -147,7 +176,48 @@ def register():
         session.clear()
 
         password = request.form.get("password")
+        username = request.form.get("username")
+        confirmation = request.form.get("confirmation")
+        users = []
+        user_id = []
+        with sqlite3.connect('typer.db') as con: 
+            cur = con.cursor()
+            users = cur.execute('SELECT * FROM users')
+            con.commit()
+        
+        # Ensure username and password were submitted
+        if not username:
+            return render_template("register.html", error="Missing username")
+        if not password:
+            return render_template("register.html", error="Missing password")
+        if not confirmation:
+            return render_template("register.html", error="Missing password confirmation")
 
+        # check if username already exist
+        for user in users:
+            if username == user[1]:
+                return render_template('register.html', error="Username already exist")
+        
+        # check for password twice
+        if password != confirmation:
+            return render_template('register.html', error='Passwords don\'t match')
 
-        return TODO
+        # submit the new user
+        with sqlite3.connect('typer.db') as con:
+            cur = con.cursor()
+            cur.execute('INSERT INTO users (username, hash) VALUES(?, ?)', (username, generate_password_hash(password)))
+            user_id = cur.execute('SELECT id FROM users WHERE username = ?', (username,))
+            con.commit()
+
+        # start a session
+        for user in user_id:
+            session['user_id'] = user[0]
+            return redirect("/")
     return render_template("register.html")
+
+
+@app.route('/logout')
+def logout():
+    """Log user out"""
+    session.clear()
+    return redirect('/')
