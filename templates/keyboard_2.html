@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 
 {% block script %}
-    <script src="/static/myscript2.js" type="module"></script>
+    {% assets "js_2" %}
+        <script src="{{ ASSET_URL }}" type="module"></script>
+    {% endassets %}
     <meta name="difficulty" content="{{ difficulty }}">
 {% endblock %}
 

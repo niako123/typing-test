@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
-    <h1>Login</h1>
+    <h1>Register</h1>
 
     <div class="container">
         <form action="/login" method="POST" class="bullet">
@@ -15,10 +15,12 @@
                     <input type="text" id="password" placeholder="Password" name="password" autocomplete="off" autofocus>
                 </div>
                 <div class="col">
-                    <button type="submit" class="btn btn-secondary">Login</button>
+                    <input type="text" id="confirm" placeholder="Password (again)" name="confirm" autocomplete="off" autofocus>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-secondary">Register</button>
                 </div>
             </div>
         </form>
     </div>
-    
 {% endblock %}

@@ -6,7 +6,23 @@ import sqlite3
 from random import shuffle
 import numpy as np
 import json
+from flask_assets import Environment, Bundle
+from flask.ext.session import Session
+
 app = Flask(__name__)
+assets = Environment(app)
+
+# Javascript code all together
+js1 = Bundle('words.js', 'myscripts.js')
+assets.register('js_1', js1)
+
+js2 = Bundle('myscript2.js')
+assets.register('js_2', js2)
+
+# Session Configuration
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = 'filesystem'
+Session(app)
 
 # Configurations
 app.secret_key = 'b1b92f2cd885248e85ba872c3399628d7062bf375d58fa0042f95afaf62a318e'
@@ -27,10 +43,6 @@ def configuration():
             flash('You were succesfully redirected')
             return render_template("limited.html")
     return render_template("configuration.html", user=user)
-
-@app.route("/register")
-def register():
-    return "TODO"
 
 @app.route("/unlimited", methods=["POST"])
 def time():
@@ -121,3 +133,21 @@ def history():
     flash("Latest result saved.")
 
     return render_template("history.html", user=user, user_runs=user_runs, runs=runs)
+
+@app.route("/login", methods=['POST', 'GET'])
+def login():
+    """ Login into a username """
+    return render_template("login.html")
+
+
+@app.route("/register", methods=['POST', 'GET'])
+def register():
+    """ Register a new account """
+    if request.method == "POST":
+        session.clear()
+
+        password = request.form.get("password")
+
+
+        return TODO
+    return render_template("register.html")

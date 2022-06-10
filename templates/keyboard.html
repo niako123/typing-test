@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 
 {% block script %}
-    <script src="/static/words.js" type="module"></script>
-    <script src="/static/myscripts.js" type="module"></script>
+    {% assets "js_1" %}
+        <script src="{{ ASSET_URL }}" type="module"></script>
+    {% endassets %}
 {% endblock %}
 
 {% block title %}Time Configuration keyboard{% endblock %}
