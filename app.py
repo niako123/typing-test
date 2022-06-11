@@ -73,7 +73,7 @@ def time():
         con.commit()
         for username in usernames:
             flash("Type to start.")
-            return render_template("keyboard.html", player=username[0], seconds=seconds, minutes=minutes)
+            return render_template("keyboard.html", player=username[0], seconds=seconds, minutes=minutes, user="user")
 
 @app.route("/limited", methods=["POST"])
 def text():
@@ -91,7 +91,7 @@ def text():
         con.commit()
         for username in usernames:
             flash("Type to start.")
-            return render_template("keyboard_2.html", player=username[0])
+            return render_template("keyboard_2.html", player=username[0], user="user")
 
 @app.route("/result", methods=["POST", "GET"])
 def result():
@@ -125,21 +125,21 @@ def result():
 @app.route("/history", methods=["GET"])
 def history():
     """ Getting the page """
-    runs = [] 
-    user_runs = []
+    runs = []
     user = ""
+    username = ""
     with sqlite3.connect('typer.db') as con: 
         cur = con.cursor()
         if 'user_id' in session:
-            user_runs = cur.execute('SELECT * FROM runs WHERE user = ?', (session['user_id'], ))
+            usernames = cur.execute('SELECT username FROM users WHERE id = ?', (session['user_id'], ))
+            for usernam in usernames:
+                username = usernam[0]
             user = "user"
         else:
             user = "guest"
         runs = cur.execute('SELECT * FROM runs')
         con.commit()
-    flash("Latest result saved.")
-
-    return render_template("history.html", user=user, user_runs=user_runs, runs=runs)
+        return render_template("history.html", user=user, runs=runs, username=username)
 
 
 @app.route("/login", methods=['POST', 'GET'])
