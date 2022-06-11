@@ -18,41 +18,45 @@
 
     <title>Key Racer: {% block title %}{% endblock %}</title>
 </head>
-<body style="background-color:rgb(18,18,18,.93); color:white;">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">
-                <img src="/static/logo1.PNG" alt="" width="30" height="24" class="d-inline-block align-text-top">
-                Key Racer
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="navbar-nav">
-                    <a class="nav-link" aria-current="page" href="/history">History</a>
-                    <a class="nav-link" aria-current="page" href="/">Configuration</a>
-                    {% if user == "user" %}
-                        <a class="nav-link" aria-current="page" href="/logout">Logout</a>
-                    {% else %}
-                        <a class="nav-link" aria-current="page" href="/login">Login</a>
-                        <a class="nav-link" aria-current="page" href="/register">Register</a>
-                    {% endif %}
+    <body style="background-color:rgb(18,18,18,.93); color:white;">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <img src="/static/logo1.PNG" alt="" width="30" height="24" class="d-inline-block align-text-top">
+                    Key Racer
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
-        </div>
-    </nav>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="alert alert-dark alert-dismissible fade show" role="alert">
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav">
+                        <a class="nav-link" aria-current="page" href="/history">History</a>
+                        <a class="nav-link" aria-current="page" href="/">Configuration</a>
+                        {% if user == "user" %}
+                            <a class="nav-link" aria-current="page" href="/logout">Logout</a>
+                        {% else %}
+                            <a class="nav-link" aria-current="page" href="/login">Login</a>
+                            <a class="nav-link" aria-current="page" href="/register">Register</a>
+                        {% endif %}
+                </div>
             </div>
-        {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-    
-</body>
+        </nav>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-dark alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+        
+        <footer class="fw-lighter"> 
+            <small>&copy; Copyright 2022, Luke Peavey.</small>
+            <small>&copy; Copyright 2022, Unlicense.</small>
+        </footer> 
+    </body>
 </html>
