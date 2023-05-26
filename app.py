@@ -9,6 +9,10 @@ import json
 from flask_assets import Environment, Bundle
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+import mimetypes
+
+mimetypes.add_type('text/css', '.css')
+mimetypes.add_type('text/javascript', '.js')
 
 app = Flask(__name__)
 assets = Environment(app)
